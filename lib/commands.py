@@ -1,7 +1,7 @@
 import webbrowser
 from urllib import parse
 from flask import jsonify
-
+from lib import tts
 
 def test():
     print('test command')
@@ -18,7 +18,10 @@ def exec(cmd):
     if 'google search' in cmd:
         cmd = cmd.split('google search')
         term = cmd[1].strip()
-        google_search(term)
+        audio = tts.generate_speech(f'google searching {term}')
+        print(audio)
+        # google_search(term)
+
         return jsonify({ 'message': f'google searching {term}' })
     if 'test' in cmd:
         print('TEST COMMAND')
