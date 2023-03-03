@@ -1,5 +1,7 @@
 import webbrowser
 from urllib import parse
+from flask import jsonify
+
 
 def test():
     print('test command')
@@ -10,5 +12,16 @@ def google_search(text):  # say google search {search}
     print(f'google searching {text}')
 
 def exec(cmd):
-    print(cmd)
-    return 'output'
+    # verify if command is valid
+    # execute command
+
+    if 'google search' in cmd:
+        cmd = cmd.split('google search')
+        term = cmd[1].strip()
+        google_search(term)
+        return jsonify({ 'message': f'google searching {term}' })
+    if 'test' in cmd:
+        print('TEST COMMAND')
+        return jsonify({ 'message': 'test command' })
+    else:
+        return jsonify({ 'message': 'invalid command' })
