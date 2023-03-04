@@ -1,9 +1,11 @@
 from flask import Flask, request, send_file
+from os import getenv
 from lib import commands, start
 
 app = Flask(__name__)
 
 start.remove_tmp_files() # removing old audio files
+start.load_env()
 
 @app.route("/cmd", methods=["POST"])
 def exec_cmd():
@@ -16,4 +18,5 @@ def exec_cmd():
 def get_audio_file():
     file_id = request.args.get('id')
     print(file_id)
-    return send_file(f'audio/tmp/{file_id}.mp3')
+    AUDIO_FILE_PATH = getenv('AUDIO_FILE_PATH')
+    return send_file(f'{AUDIO_FILE_PATH}{file_id}.mp3')
