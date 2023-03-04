@@ -8,18 +8,29 @@ def test():
 
 def google_search(text):  # say google search {search}
     web_encode = parse.quote(text)
-    webbrowser.open(f"https://www.google.com/search?q={web_encode}")
-    print(f'google searching {text}')
+    webbrowser.open(f'https://www.google.com/search?q={web_encode}')
+
+def show_my_devices():
+    webbrowser.open('https://www.google.com/android/find/')
 
 def exec(cmd):
     if 'google search' in cmd:
         cmd = cmd.split('google search')
         term = cmd[1].strip()
-        audio = tts.generate_speech(f'google searching {term}')
-        print(audio)
+        if 'about' in term.split(' ')[0]:
+            term = term.replace('about', '')
+        message = f'google searching {term}'
         google_search(term)
+        tts.generate_speech(message)
+        return jsonify({ 'message': message })
 
-        return jsonify({ 'message': f'google searching {term}' })
+    if 'show my devices' in cmd:
+        cmd = 'find my devices'
+        message = f'showing your devices'
+        show_my_devices()
+        tts.generate_speech(message)
+        return jsonify({ 'message': message })
+    
     if 'test' in cmd:
         print('TEST COMMAND')
         return jsonify({ 'message': 'test command' })
