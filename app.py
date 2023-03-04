@@ -1,7 +1,9 @@
 from flask import Flask, request, send_file
-from lib import commands
+from lib import commands, start
 
 app = Flask(__name__)
+
+start.remove_tmp_files() # removing old audio files
 
 @app.route("/cmd", methods=["POST"])
 def exec_cmd():
