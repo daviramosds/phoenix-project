@@ -7,7 +7,7 @@ app = Flask(__name__)
 start.load_env()
 start.handle_tmp_files()
 
-@app.route("/cmd", methods=["POST"])
+@app.route("/cmd", methods=["POST"]) # BASE_URL/cmd/
 def exec_cmd():
     data = request.json
     cmd = data.get('cmd')
