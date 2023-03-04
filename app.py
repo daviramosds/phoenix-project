@@ -4,8 +4,8 @@ from lib import commands, start
 
 app = Flask(__name__)
 
-start.remove_tmp_files() # removing old audio files
 start.load_env()
+start.handle_tmp_files()
 
 @app.route("/cmd", methods=["POST"])
 def exec_cmd():
@@ -17,6 +17,6 @@ def exec_cmd():
 @app.route('/audio') # BASE_URL/audio?id={id}
 def get_audio_file():
     file_id = request.args.get('id')
-    print(file_id)
-    AUDIO_FILE_PATH = getenv('AUDIO_FILE_PATH')
-    return send_file(f'{AUDIO_FILE_PATH}{file_id}.mp3')
+    FILE_PATH = getenv('TMP_FILE_PATH')
+    FILE_PREFIX = getenv('AUDIO_FILE_PREFIX')
+    return send_file(f'{FILE_PATH}{FILE_PREFIX}{file_id}.mp3')
