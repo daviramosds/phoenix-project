@@ -39,4 +39,5 @@ def exec(cmd):
         print('TEST COMMAND')
         return jsonify({'message': 'test command'})
     else:
-        return jsonify({'message': 'invalid command'})
+        audio_b64 = tts.generate_speech('invalid command')
+        return jsonify({'message': 'invalid command', 'audio_b64': audio_b64})
