@@ -38,6 +38,15 @@ def exec(cmd):
     if 'test' in cmd:
         print('TEST COMMAND')
         return jsonify({'message': 'test command'})
+
+    if 'generate speech' in cmd:
+        audio_b64 = tts.generate_speech('Hello master! what can i do for you?')
+        return jsonify({'audio_b64': audio_b64})
+
+    if 'thanks' in cmd or 'thank you':
+        audio_b64 = tts.generate_speech("You're Welcome")
+        return jsonify({'audio_b64': audio_b64})
+
     else:
         audio_b64 = tts.generate_speech('invalid command')
         return jsonify({'message': 'invalid command', 'audio_b64': audio_b64})

@@ -4,9 +4,7 @@ from lib import commands, start
 from flask_cors import CORS
 
 app = Flask(__name__)
-# CORS(app)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
 
 start.load_env()
 start.handle_tmp_files()
