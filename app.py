@@ -8,6 +8,7 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 start.load_env()
 start.handle_tmp_files()
+start.handle_cache_files()
 
 @app.route("/cmd", methods=["POST"]) # BASE_URL/cmd/
 def exec_cmd():

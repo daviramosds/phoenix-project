@@ -1,30 +1,38 @@
 from gtts import gTTS
-from random import randint
-from os import getenv, remove
+from os import getenv, remove, path, system
 import base64
 from pydub import AudioSegment
 
-def generate_speech(text):
-    tts = gTTS(text, lang="en")
-    file_id = randint(1000, 9999)
-    TMP_FILE_PATH = getenv('TMP_FILE_PATH')
-    AUDIO_FILE_PREFIX = getenv('AUDIO_FILE_PREFIX')
-    file_name = f'{file_id}.mp3'
-    file_path = f'{TMP_FILE_PATH}{AUDIO_FILE_PREFIX}{file_name}'
-    tts.save(file_path)
-
-    sound = AudioSegment.from_file(file_path, format="mp3")
+def change_speed(audio_file_path): 
+    # change audio speed
+    sound = AudioSegment.from_file(audio_file_path, format="mp3")
     sound = sound.speedup(playback_speed=1.2)
-    sound.export(file_path, format="mp3")
+    sound.export(audio_file_path, format="mp3")
 
+def generate_speech(text):
+    
+    TMP_FILE_PATH = getenv('TMP_FILE_PATH')
+    CACHE_FILE_PATH = getenv('CACHE_FILE_PATH')
+    AUDIO_FILE_PREFIX = getenv('AUDIO_FILE_PREFIX')
+    slug = text.lower().strip().replace(' ', '_')
+    audio_file_path = f'{TMP_FILE_PATH}{AUDIO_FILE_PREFIX}{slug}.mp3'
+    cache_file_path = f'{CACHE_FILE_PATH}{AUDIO_FILE_PREFIX}{slug}.b64'
 
-    with open(file_path, "rb") as audio_file:
-        encoded_string = base64.b64encode(audio_file.read())
+    if path.isfile(cache_file_path):
+        print('already exist')
+        f = open(cache_file_path, 'r')
+        return f.read().replace("b'", '')
+    else:
+        tts = gTTS(text, lang="en")
 
-    remove(file_path)
+        tts.save(audio_file_path)
+        change_speed(audio_file_path)
 
-    encoded_string = str(encoded_string)
-    encoded_string = encoded_string.replace("b'", '')
-    encoded_string = encoded_string.replace("'", '')
+        with open(audio_file_path, "rb") as audio_file:
+            encoded_string = str(base64.b64encode(audio_file.read())).replace("b'", '').replace("'", '')
 
-    return str(encoded_string)
+        remove(audio_file_path)
+
+        system(f'echo {encoded_string} > {cache_file_path}')
+
+        return encoded_string

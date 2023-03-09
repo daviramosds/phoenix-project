@@ -13,3 +13,8 @@ def handle_tmp_files():
     else:
         for filename in glob(f'{TMP_FILE_PATH}*'):
             remove(filename)
+
+def handle_cache_files():
+    CACHE_FILE_PATH = getenv('CACHE_FILE_PATH')
+    if path.exists(CACHE_FILE_PATH) == False:
+        mkdir(CACHE_FILE_PATH)
