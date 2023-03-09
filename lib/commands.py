@@ -20,7 +20,7 @@ def show_my_devices():
 
 def respond(text):
     audio_b64 = tts.generate_speech(text)
-    return jsonify({'message': 'invalid command', 'audio_b64': audio_b64})
+    return jsonify({'audio_b64': audio_b64})
 
 def exec(cmd):
     if 'google search' in cmd:
